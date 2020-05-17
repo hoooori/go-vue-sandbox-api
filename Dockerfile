@@ -1,8 +1,11 @@
-FROM golang:1.14.2-alpine3.11
+FROM golang:1.14.3
 
-ENV WD /app \
-    GO111MODULE on
+ENV WORKSPACE='/app' \
+    GO111MODULE='on'
 
-WORKDIR $WD
+WORKDIR $WORKSPACE
 
-ADD . $WD
+COPY . $WORKSPACE
+
+RUN go get -u github.com/cespare/reflex && \
+    go get -v github.com/rubenv/sql-migrate/...
