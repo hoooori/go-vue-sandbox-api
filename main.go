@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-vue-sandbox-api/models"
 )
 
 func setupRouter() *gin.Engine {
@@ -18,6 +19,9 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
+
+	models.ConnectDB()
+
 	r.Run()
 	// r.Run(":8080")
 }
