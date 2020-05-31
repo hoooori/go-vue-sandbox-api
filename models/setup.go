@@ -9,9 +9,11 @@ import (
 	"os"
 )
 
-var Db *sql.DB
+var DB *sql.DB
 
-func ConnectDB() {
+func ConnectDB() *sql.DB {
+	var err error
+
 	connectionString := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=true&loc=Local",
 		os.Getenv("DB_USER"),
@@ -21,11 +23,12 @@ func ConnectDB() {
 		os.Getenv("DB_NAME"),
 	)
 
-	db, err := sql.Open("mysql", connectionString)
+	DB, err = sql.Open("mysql", connectionString)
+
 	if err != nil {
 		log.Fatalf("failed to connect database: %s", err)
 	}
 
-	Db = db
-	boil.SetDB(Db)
+	boil.SetDB(DB)
+	return DB
 }
