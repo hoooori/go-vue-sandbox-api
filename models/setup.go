@@ -1,11 +1,15 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/volatiletech/sqlboiler/boil"
+	"log"
 	"os"
 )
+
+var Db *sql.DB
 
 func ConnectDB() {
 	connectionString := fmt.Sprintf(
@@ -17,12 +21,11 @@ func ConnectDB() {
 		os.Getenv("DB_NAME"),
 	)
 
-	db, err := gorm.Open("mysql", connectionString)
-	defer db.Close()
-
+	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
-		fmt.Errorf("failed to connect database: %s", err)
+		log.Fatalf("failed to connect database: %s", err)
 	}
 
-	fmt.Println("database connected successfully!!")
+	Db = db
+	boil.SetDB(Db)
 }
